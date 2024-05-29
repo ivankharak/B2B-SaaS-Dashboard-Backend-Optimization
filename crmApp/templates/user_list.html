@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User List</title>
+</head>
+<body>
+    <h1>User List</h1>
+    <form method="get">
+        <input type="text" name="search" placeholder="Search..." value="{{ search_query }}">
+        <select name="sort_by">
+            <option value="first_name" {% if sort_by == 'first_name' %}selected{% endif %}>First Name</option>
+            <option value="last_name" {% if sort_by == 'last_name' %}selected{% endif %}>Last Name</option>
+            <option value="customer_id" {% if sort_by == 'customer_id' %}selected{% endif %}>Customer ID</option>
+            <option value="created" {% if sort_by == 'created' %}selected{% endif %}>Created</option>
+        </select>
+        <input type="number" name="page_size" value="{{ page_size }}" placeholder="Page Size">
+        <button type="submit">Filter</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Customer ID</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Birthday</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.last_name }}</td>
+                <td>{{ user.customer_id }}</td>
+                <td>{{ user.phone_number }}</td>
+                <td>{{ user.address.street }}, {{ user.address.city }}</td>
+                <td>{{ user.birthday }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div>
+        <span>Page {{ users.number }} of {{ users.paginator.num_pages }}</span>
+        {% if users.has_previous %}
+        <a href="?page={{ users.previous_page_number }}&amp;search={{ search_query }}&amp;sort_by={{ sort_by }}&amp;page_size={{ page_size }}">Previous</a>
+        {% endif %}
+        {% if users.has_next %}
+        <a href="?page={{ users.next_page_number }}&amp;search={{ search_query }}&amp;sort_by={{ sort_by }}&amp;page_size={{ page_size }}">Next</a>
+        {% endif %}
+    </div>
+</body>
+</html>
